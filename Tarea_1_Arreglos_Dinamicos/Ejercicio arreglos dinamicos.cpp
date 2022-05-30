@@ -18,7 +18,7 @@ int main() {
 		suma += p[i];
 	}
 	prom = (float)suma / n;
-	printf("\nEl promedio de notas es: %.2f", prom);
-	delete []p;
+	printf("\nEl promedio es: %.2f", prom);
+	delete []p; //Se libera la memoria asignada
 	return 0;
 }
