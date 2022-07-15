@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAXIMO 50
 
 typedef struct Nodo {
-	int dato;
+	int ci;
+	char carrera[MAXIMO];
 	struct Nodo* siguiente;
 } Nodo;
 
@@ -22,23 +24,24 @@ struct Lista* crearl(){
 	return lista;
 }
 
-Nodo* CrearNodo(int dato){
+Nodo* CrearNodo(int ci, char *carrera){
 	Nodo* nodo = (Nodo*) malloc (sizeof (Nodo));
-	nodo->dato=dato;
+	nodo->ci=ci;
+	strcpy(nodo->carrera, carrera);
 	nodo->siguiente=NULL;
 	return nodo;
 }
 
-void insPrincipio(Lista* lista, int dato){
-	Nodo* nodo = CrearNodo(dato);
+void insPrincipio(Lista* lista, int ci, char *carrera){
+	Nodo* nodo = CrearNodo(ci, carrera);
 	nodo->siguiente = lista->cabeza;
 	lista->cabeza = nodo;
 	lista->longitud++;
 }
 
-void insFinal(Lista* lista, int dato){
+void insFinal(Lista* lista, int ci, char *carrera){
 	
-	Nodo*nodo = CrearNodo(dato);
+	Nodo*nodo = CrearNodo(ci, carrera);
 	if (lista->cabeza == NULL) {
 		lista->cabeza = nodo;
 	} 
@@ -54,9 +57,9 @@ void insFinal(Lista* lista, int dato){
 }
 
 
-void insEnN(int n, Lista* lista, int dato){
+void insEnN(int n, Lista* lista, int ci, char *carrera){
 	n = n-1;
-	Nodo* nodo = CrearNodo(dato);
+	Nodo* nodo = CrearNodo(ci, carrera);
 	if (lista->cabeza == NULL) {
 		lista->cabeza == nodo;
 	} 
@@ -64,12 +67,10 @@ void insEnN(int n, Lista* lista, int dato){
 	else {
 		Nodo* puntero = lista->cabeza;
 		int posicion = 0;
-	
 		while (posicion < n && puntero->siguiente){
 			puntero = puntero->siguiente;
 			posicion++;
 		} 
-		
 		if (posicion != n){
 			printf ("\n Ningun dato es encontrado\n La cedula del estudiante se agregara al final de la lista \n");
 		}
@@ -81,21 +82,25 @@ void insEnN(int n, Lista* lista, int dato){
 
 
 
-void Obtener(int n, Lista* lista){
+void Obtener(int ci, Lista* lista){
 	if (lista->cabeza == NULL){
 		printf ("\n La lista esta vacia \n");
-	} else {
-			Nodo* puntero = lista->cabeza;
-		int posicion = 0;
-		while (puntero->siguiente && puntero->dato != n){
+	} 
+	else {
+		Nodo* puntero = lista->cabeza;
+		int i = 0;
+		while (puntero->siguiente && puntero->ci != ci){
 			puntero = puntero->siguiente;
-			posicion++;
+			i++;
+		}	
+		if (puntero->ci == ci){
+			printf ("\n La CI %d si coincide con unos de los estudiantes, esta en la posicion %d y este estudia %s\n", puntero->ci, i+1, puntero->carrera);
 		}
-		printf ("\n La CI si coincide con unos de los estudiantes, y esta de puesto %d\n", posicion+1);
-		if (posicion != n){
+		else {
 			printf ("\n No hay ningun estudiante con esta CI\n");
 		}
 	}
+
 }
 
 void DeletePrincipio(Lista* lista){
@@ -104,11 +109,12 @@ void DeletePrincipio(Lista* lista){
 	lista->cabeza = lista->cabeza->siguiente;
 	delete(eliminado);
 	lista->longitud--;
-	printf ("Se ha eliminado la cedula del estudiante exitosamente\n");
-}  else {
+	printf ("Se ha eliminado el primer estudiante exitosamente del registro\n");
+	}  
+	else {
 	printf("\n La lista esta vacia \n");
 	}
-	lista->longitud--;
+	
 }
 
 
@@ -119,23 +125,26 @@ void DeleteUltimo(Lista* lista){
 		Nodo* puntero = lista->cabeza;
 		while (puntero->siguiente->siguiente){
 			puntero = puntero->siguiente;
-		}
+			}
 		Nodo* eliminado = puntero->siguiente;
 		puntero->siguiente=NULL;
 		delete(eliminado);
 		lista->longitud--;
-		printf ("Se elimino la cedula del estudiante con exito\n");
-	} else {
+		printf ("Se elimino el ultimo estudiante con exito\n");
+		} 
+		
+		else {
 		Nodo* eliminado = lista->cabeza;
 		lista->cabeza = NULL;
 		delete(eliminado);
 		lista->longitud--;
-		printf ("Se elimino la cedula del estudiante con exito\n");
-	}
-	} else{
+		printf ("\nSe elimino el ultimo estudiante con exito\n");
+		}
+	} 
+	
+	else{
 		printf ("\n La lista esta vacia \n");
 	}
-	lista->longitud--;
 }
 
 
@@ -146,7 +155,7 @@ void DeleteEnN(int n, Lista* lista){
 			lista->cabeza = lista->cabeza->siguiente;
 			delete(eliminado);
 			lista->longitud--;
-			printf ("Se ha eliminado la cedula del estudiante en la posicion solicitada\n");
+			printf ("\nSe ha eliminado el estudiante en la posicion solicitada\n");
 		} 
 		
 		else if (n < lista->longitud) {
@@ -160,25 +169,25 @@ void DeleteEnN(int n, Lista* lista){
 			puntero->siguiente = eliminado->siguiente;
 			delete(eliminado);
 			lista->longitud--;	
-			printf ("Se ha eliminado la cedula del estudiante en la posicion solicitada\n");
+			printf ("\nSe ha eliminado el estudiante en la posicion solicitada\n");
 		}
 		
 		else{
 			printf("\n No hay ningun dato en esta posicion \n");
 		}
 	}
-	lista->longitud--;
 }
 
 
 void MostrarLista(Lista* lista){
 	if (lista->cabeza == NULL){
 		printf("\n La lista se encuentra vacia \n");
-	} else {
+	} 
+	else {
 		Nodo* puntero = lista->cabeza;
 		int posicion = 0;
 		while (posicion < lista->longitud){
-			printf("- %d -", puntero->dato);
+			printf("- [%d] %s -", puntero->ci, puntero->carrera);
 			puntero = puntero->siguiente;
 			posicion++;
 		}
@@ -196,38 +205,46 @@ int main(){
 	struct Lista* l = crearl();
 	int repetidor = true;
 	int opcion;
-	int dato;
+	int ci;
+	char carrera[MAXIMO];
 	int n;
 	do{
 	
-	printf ("MENU DE OPCIONES: \n\n");
-	printf ("1 Agregar la CI de un estudiante al principio\n");
-	printf ("2 Agregar la CI de un estudiante al final\n");
-	printf ("3 Agregar la CI de un estudiante en una posicion 'n'\n");
-	printf ("4 Eliminar la CI de un estudiante al principio\n");
-	printf ("5 Eliminar la CI de un estudiante al final\n");
-	printf ("6 Eliminar la CI de un estudiante en una posicion 'n'\n");
-	printf ("7 Encontrar posicion de una CI de un estudiante\n");
-	printf ("8 Mostrar la lista de CI\n");
-	printf ("9 Salir\n\n");
+	printf ("REGISTRO DE ESTUDIANTES: \n\n");
+	printf ("1 Agregar a un estudiante al principio\n");
+	printf ("2 Agregar a un estudiante al final\n");
+	printf ("3 Agregar a un estudiante en una posicion 'n'\n");
+	printf ("4 Eliminar a un estudiante al principio\n");
+	printf ("5 Eliminar a un estudiante al final\n");	
+	printf ("6 Eliminar a un estudiante en una posicion 'n'\n");
+	printf ("7 Encontrar carrera y posicion un estudiante en la lista\n");
+	printf ("8 Mostrar la lista de estudiantes\n");
+	printf ("9 Cantidad de estudiantes en el registro\n");
+	printf ("10 Salir\n\n");
 	scanf ("%d", &opcion);
 	switch (opcion){
 		case 1: 
 			printf ("\nIntroduzca la cedula del estudiante para agregar al principio\n");
-			scanf ("%d", &dato);
-			insPrincipio(l,dato);
+			scanf ("%d", &ci);
+			printf ("\nIntroduzca la carrera de dicho estudiante\n");
+			scanf ("%s", &carrera);
+			insPrincipio(l,ci, carrera);
 			break;
 		case 2: 
 			printf ("\nIntroduzca la cedula del estudiante para agregar al final\n");
-			scanf ("%d", &dato);
-			insFinal(l,dato);
+			scanf ("%d", &ci);
+			printf ("\nIntroduzca la carrera de dicho estudiante\n");
+			scanf ("%s", &carrera);
+			insFinal(l,ci, carrera);
 			break;
 		case 3:
 			printf ("\nIntroduzca la cedula del estudiante\n");
-			scanf ("%d", &dato);
-			printf("Introduzca la posicion\n");
+			scanf ("%d", &ci);
+			printf ("\nIntroduzca la carrera de dicho estudiante\n");
+			scanf ("%s", &carrera);
+			printf("\nIntroduzca la posicion\n");
 			scanf ("%d", &n);
-			insEnN(n-1,l,dato);
+			insEnN(n-1,l,ci,carrera);
 			break;
 		case 4:
 			DeletePrincipio(l);
@@ -236,24 +253,27 @@ int main(){
 			DeleteUltimo(l);
 			break;
 		case 6: 
-			printf("Introduzca la posicion\n");
+			printf("\nIntroduzca la posicion\n");
 			scanf ("%d", &n);
 			DeleteEnN (n-1,l);
 			break;
 		case 7:
-			printf("Introduzca la CI que desea buscar\n");
-			scanf ("%d", &n);
-			Obtener(n-1,l);
+			printf("\nIntroduzca la CI del estudiante para obtener su carrera\n");
+			scanf ("%d", &ci);
+			Obtener(ci,l);
 			break;
 		case 8:
 			MostrarLista(l);
 			break;
+		case 9:
+			longitud(l);
+			printf("\nLa lista hasta ahora tiene %d registros\n", l->longitud);
 		default:
-			printf("Introduzca una opcion validad \n");
+			printf("\nIntroduzca un valor valido\n");
 			break;
-	}
+	}                      
 	system("pause");
 	system ("cls");
-}while(opcion!=9);
+}while(opcion!=10);
 	return 0;
 }

@@ -35,9 +35,7 @@ void agregar( struct cola &c, char *task) {
      strcpy(new_nodo->task, task); //strcpy porque estamos hablando de cadenas
      new_nodo -> next = NULL;
      
-     // Asingacion de punteros frente y fin
-     
-     // Si esta vcia entonces delante y fin son el nuevo nodo
+     // Si esta vacia entonces delante y fin son el nuevo nodo
      if(c.delante == NULL)
          c.delante = new_nodo;
          
@@ -51,16 +49,14 @@ void agregar( struct cola &c, char *task) {
  
 /*Se crea la funcion de eliminar un elemento en la cola*/
 
-char eliminar( struct cola &c )
+void eliminar( struct cola &c )
 {
-	 char task[MAXIMO];
+	 //char task[MAXIMO];
      struct nodo *new_nodo; 
      new_nodo = c.delante;      		// new_nodo apunta al inicio de la cola
-     task[MAXIMO] = new_nodo -> task[MAXIMO];
      c.delante = (c.delante) -> next;	// Se cambia el puntero que apunta hacia adelante hacia el siguiente dato
      delete(new_nodo);         		 	// libera memoria a donde apuntaba new_nodo
      
-     return task[MAXIMO];
 }
 
 /*Vaciar Cola*/
@@ -96,6 +92,15 @@ void mostrar( struct cola c )
         i++;
      }    
 }
+
+/*Mostrar Frente*/
+
+void frente( struct cola c )
+{
+     struct nodo *new_nodo;
+     new_nodo = c.delante;
+	 printf("\n\tLa tarea que esta de primero en la cola es: %s\n\n", new_nodo->task);  
+}
  
 /*Funcion Principal*/
 int main()
@@ -108,7 +113,7 @@ int main()
    
     char task[MAXIMO];   
     int op;    // opcion elegida del menu
-    char x;    // dato que devuelve la funcion delete
+    //char x;    // dato que devuelve la funcion delete
     	
     do {
     	
@@ -117,7 +122,8 @@ int main()
 	    printf(" 2. Ya hiciste una tarea? borrala! \n");
 	    printf(" 3. Mostrar tareas del dia\n");
 	    printf(" 4. Vaciar cola de tareas\n");
-	    printf(" 5. Salir\n");
+	    printf(" 5. Mostrar tarea que sigue (primera)\n");
+	    printf(" 6. Salir\n");
 		printf("Ingrese una opcion: \n\n");
 		scanf("%d", &op); 
 		
@@ -135,7 +141,7 @@ int main()
             	 if(c.delante==NULL) printf("\n\tNo es posible borrar una tarea, porque no has ingresado ninguna!\n\n");
                  else {
 				 	eliminar(c);
-                 	printf("\n\tFelicidades realizaste %s...Sigue asi!!\n\n", task);
+                 	printf("\n\tFelicidades se elimino esa tarea de la lista. Sigue asi!!\n\n");
 				 }
             	 break;
                  
@@ -155,9 +161,14 @@ int main()
 				 }
                  printf("\n\n");
             	 break;
+        	
+        	case 5:
+        		if(c.delante==NULL) printf("\n\tNo es posible mostrar el primero de  la lista, porque no hay ningun dato!\n\n");
+        		else frente(c);
+        		break;
             	 
             default:
-				printf("Introduzca una opcion validad \n");
+				printf("Introduzca una opcion valida \n");
 				printf("\n\n");
 				break;
          }
@@ -165,7 +176,7 @@ int main()
         system("pause");  
 		system("cls");
  
-    }while(op!=5);
+    }while(op!=6);
    
    
     return 0;
