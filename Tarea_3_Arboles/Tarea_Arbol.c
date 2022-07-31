@@ -12,7 +12,7 @@ struct nodo{
 
 struct nodo *crear_nodo(struct nodo *padre, int valor);
 void agregar_valor(struct nodo *arbol, int valor);
-void busqueda(struct nodo *arbol, int valor);
+void inOrder(struct nodo *arbol);
 
 int main(){
 //Creamos el arbol vacio
@@ -25,7 +25,7 @@ int main(){
 	do {
 		printf ("Elija una opcion: \n");
 		printf ("1) Agregar un nodo al arbol. \n");
-		printf ("2) Recorrer arbol hasta cierto nodo dado\n");
+		printf ("2) Recorrer arbol de forma creciente\n");
 		printf ("3) Salir \n");
 		scanf("%d", &opcion);
 		switch (opcion){
@@ -37,9 +37,7 @@ int main(){
 				system ("cls");	
 				break;
 			case 2:
-				printf("Introduzca el valor que desea buscar en el arbol\n");
-				scanf("%d", &n);
-				busqueda(arbol, n);
+				inOrder(arbol);
 				system("pause");
 				system ("cls");	
 				break;
@@ -99,29 +97,13 @@ void agregar_valor(struct nodo *arbol, int valor){
 }
 
 //Recorrido
-void busqueda(struct nodo *arbol, int valor){
+void inOrder(struct nodo *arbol){
 	
-	if (!arbol->valor){
-		printf("El arbol se encuentra vacio", valor);
-	}
-	else {
-		struct nodo *aux;
-  		aux = arbol;
-  		int c = 1;
-  		while(c){
-  			printf (" %i - ", aux->valor);
-   			if(valor>aux->valor){
-    			aux = aux->der;  
-   			}
-			else if (valor < aux->valor){
-   				aux = aux->izq;
-   			} 
-			else if (aux->valor == valor){
-   				printf ("\n El recorrido ha finalizado \n");
-   				c = 0;
-   			}
-  		}		
-  
-	}
+	if (arbol != NULL)
+    {
+        inOrder(arbol->izq);
+        printf("[ %d ] -\n", arbol->valor);
+        inOrder(arbol->der);
+    }
 }
 	
