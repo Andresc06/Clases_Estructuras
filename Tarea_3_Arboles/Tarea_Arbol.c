@@ -102,7 +102,7 @@ void inOrder(struct nodo *arbol){
 	if (arbol != NULL)
     {
         inOrder(arbol->izq);
-        printf("[ %d ] -\n", arbol->valor);
+        printf("[ %d ]\n", arbol->valor);
         inOrder(arbol->der);
     }
 }
