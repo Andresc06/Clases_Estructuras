@@ -23,7 +23,10 @@ int main(){
 	int opcion;
 	int n; 
 	do {
-		printf ("Introduzca el numero de la opcion de su preferencia: \n 1) Agregar un nodo al arbol. \n 2) Recorrer arbol hasta cierto nodo dado\n 3) Salir \n");
+		printf ("Elija una opcion: \n");
+		printf ("1) Agregar un nodo al arbol. \n");
+		printf ("2) Recorrer arbol hasta cierto nodo dado\n");
+		printf ("3) Salir \n");
 		scanf("%d", &opcion);
 		switch (opcion){
 		 	case 1:
@@ -41,7 +44,7 @@ int main(){
 				system ("cls");	
 				break;
 			default:
-				printf("Introduzca una opcion validad \n");
+				printf("Introduzca una opcion valida \n");
 				system("pause");
 				system ("cls");	
 				break;
